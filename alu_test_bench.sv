@@ -38,14 +38,14 @@ module alu_test_bench();
         $display("  alu_input1    alu_input2   opcode       alu_output");
 
         // test addition opcode
-        for (integer i=0; i<255; i++) begin
-          for (integer j=0; j<255; j++) begin
+        for (integer i=-128; i<127; i++) begin
+          for (integer j=-128; j<127; j++) begin
             alu_input1 = i;
             alu_input2 = j;
             alu_opcode = 3'b000;
             
             #30;
-            // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output); //print values C-style formatting
+            // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
 
             alu_expected_output = alu_input1 + alu_input2;
             if (alu_output != alu_expected_output) begin
@@ -56,14 +56,14 @@ module alu_test_bench();
         end
         
         // test subtraction opcode
-        for (integer i=0; i<255; i++) begin
-          for (integer j=0; j<255; j++) begin
+        for (integer i=-128; i<127; i++) begin
+          for (integer j=-128; j<127; j++) begin
             alu_input1 = i;
             alu_input2 = j;
             alu_opcode = 3'b001;
             
             #30;
-            // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output); //print values C-style formatting
+            // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
 
             alu_expected_output = alu_input1 - alu_input2;
             if (alu_output != alu_expected_output) begin
@@ -75,14 +75,14 @@ module alu_test_bench();
         
 
         // test multiplication opcode
-        for (integer i=0; i<255; i++) begin
-          for (integer j=0; j<255; j++) begin
+        for (integer i=-128; i<127; i++) begin
+          for (integer j=-128; j<127; j++) begin
             alu_input1 = i;
             alu_input2 = j;
             alu_opcode = 3'b010;
             
             #30;
-            // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output); //print values C-style formatting
+            // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
 
             alu_expected_output = alu_input1 * alu_input2;
             if (alu_output != alu_expected_output) begin
@@ -94,14 +94,14 @@ module alu_test_bench();
 
 
         // test equals opcode
-        for (integer i=0; i<255; i++) begin
-          for (integer j=0; j<255; j++) begin
+        for (integer i=-128; i<127; i++) begin
+          for (integer j=-128; j<127; j++) begin
             alu_input1 = i;
             alu_input2 = j;
             alu_opcode = 3'b011;
             
             #30;
-            // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output); //print values C-style formatting
+            // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
 
             alu_expected_output = (alu_input1 == alu_input2);
             if (alu_output != alu_expected_output) begin
@@ -113,14 +113,14 @@ module alu_test_bench();
 
 
         // test greater than opcode
-        for (integer i=0; i<255; i++) begin
-          for (integer j=0; j<255; j++) begin
+        for (integer i=-128; i<127; i++) begin
+          for (integer j=-128; j<127; j++) begin
             alu_input1 = i;
             alu_input2 = j;
             alu_opcode = 3'b100;
             
             #30;
-            $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output); //print values C-style formatting
+            // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
 
             alu_expected_output = (alu_input1 > alu_input2);
             if (alu_output != alu_expected_output) begin
