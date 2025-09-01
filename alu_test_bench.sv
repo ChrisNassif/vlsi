@@ -6,13 +6,18 @@ module alu_test_bench();
 
     logic clock;
     logic reset;
+    logic alu_enable;
     logic [2:0] opcode;
     logic [7:0] a_in, b_in;
     logic [7:0] c_out;
     
     
-    alu main_alu(.clock_in(clock), .reset_in(reset), .opcode_in(opcode), .alu_input1(a_in), .alu_input2(b_in), .alu_output(c_out));
+    alu main_alu(.clock_in(clock), .reset_in(reset), .enable_in(1'b1), .opcode_in(opcode), .alu_input1(a_in), .alu_input2(b_in), .alu_output(c_out));
  
+    initial begin
+        alu_enable <= 1'b1;    
+    end
+
     always begin
         #5 clock = !clock;
     end
@@ -21,7 +26,8 @@ module alu_test_bench();
     initial begin
         $dumpfile("alu_test_bench.vcd"); //file to store value change dump (vcd)
         $dumpvars(0, alu_test_bench); //store everything at the current level and below
-        $display("Starting Sim"); //print nice message at start
+
+
         clock = 0; //0 is generally a safe value to initialize with and not specify size
         reset = 0;
         a_in = 0;
@@ -38,7 +44,7 @@ module alu_test_bench();
             b_in = j;
             opcode = 3'b0;
             
-            #10;
+            #30;
             $display("%8b %8b %3b     %8b",a_in, b_in, opcode, c_out); //print values C-style formatting
           
           end
