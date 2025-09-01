@@ -18,7 +18,7 @@ module alu_test_bench();
     always begin
         #5 clock = !clock;
     end
- 
+
 
 
     initial begin
@@ -39,7 +39,7 @@ module alu_test_bench();
 
         // test addition opcode
         for (integer i=-128; i<127; i++) begin
-          for (integer j=-128; j<127; j++) begin
+        for (integer j=-128; j<127; j++) begin
             alu_input1 = i;
             alu_input2 = j;
             alu_opcode = 3'b000;
@@ -52,12 +52,12 @@ module alu_test_bench();
                 $error("Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
             end
 
-          end
+        end
         end
         
         // test subtraction opcode
         for (integer i=-128; i<127; i++) begin
-          for (integer j=-128; j<127; j++) begin
+        for (integer j=-128; j<127; j++) begin
             alu_input1 = i;
             alu_input2 = j;
             alu_opcode = 3'b001;
@@ -70,13 +70,13 @@ module alu_test_bench();
                 $error("Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
             end
 
-          end
+        end
         end
         
 
         // test multiplication opcode
         for (integer i=-128; i<127; i++) begin
-          for (integer j=-128; j<127; j++) begin
+        for (integer j=-128; j<127; j++) begin
             alu_input1 = i;
             alu_input2 = j;
             alu_opcode = 3'b010;
@@ -89,13 +89,13 @@ module alu_test_bench();
                 $error("Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
             end
 
-          end
+        end
         end
 
 
         // test equals opcode
         for (integer i=-128; i<127; i++) begin
-          for (integer j=-128; j<127; j++) begin
+        for (integer j=-128; j<127; j++) begin
             alu_input1 = i;
             alu_input2 = j;
             alu_opcode = 3'b011;
@@ -108,13 +108,13 @@ module alu_test_bench();
                 $error("Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
             end
 
-          end
+        end
         end
 
 
         // test greater than opcode
         for (integer i=-128; i<127; i++) begin
-          for (integer j=-128; j<127; j++) begin
+        for (integer j=-128; j<127; j++) begin
             alu_input1 = i;
             alu_input2 = j;
             alu_opcode = 3'b100;
@@ -127,11 +127,10 @@ module alu_test_bench();
                 $error("Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
             end
 
-          end
+        end
         end
 
         $display("Finishing Sim"); //print nice message at end
         $finish;
     end
 endmodule
- 
