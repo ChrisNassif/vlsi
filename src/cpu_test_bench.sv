@@ -36,7 +36,7 @@ module cpu_test_bench();
 
 
         // $fclose(file_descriptor);
-        $readmemh("machine_code.gpu", machine_code);
+        $readmemh("machine_code", machine_code);
     end
 
 

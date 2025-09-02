@@ -3,7 +3,7 @@ test_alu:
 	vvp build/alu_test_bench.out
 	gtkwave build/alu_test_bench.vcd
 
-alu_transistor_count:
+transistor_count_alu:
 	yosys -p "read_verilog -sv src/alu.sv; synth; stat -tech cmos"
 
 
@@ -14,5 +14,8 @@ test_cpu:
 	vvp build/cpu_test_bench.out
 	gtkwave build/cpu_test_bench.vcd
 
-cpu_transistor_count:
+transistor_count_cpu:
 	yosys -p "read_verilog -sv src/cpu.sv src/alu.sv src/register_file.sv; synth; stat -tech cmos"
+
+show_cpu_synthesis:
+	yosys -p "read_verilog -sv src/cpu.sv src/alu.sv src/register_file.sv; synth -top cpu; stat -tech cmos; show cpu"
