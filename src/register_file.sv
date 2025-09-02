@@ -12,6 +12,9 @@ module register_file #(
 );
 
     reg [7:0] registers [NUMBER_OF_REGISTERS];
+    assign read_data1_out = registers[read_register_address1_in];
+    assign read_data2_out = registers[read_register_address2_in];
+
 
     initial begin
         for (int i = 0; i < NUMBER_OF_REGISTERS; i++) begin
@@ -25,10 +28,8 @@ module register_file #(
         end
     end
 
-    assign read_data1_out = registers[read_register_address1_in];
-    assign read_data2_out = registers[read_register_address2_in];
 
-
+    // make the registers visible to gtkwave
     genvar i;
     generate
         for (i = 0; i < NUMBER_OF_REGISTERS; i++) begin : expose_regs
@@ -36,5 +37,6 @@ module register_file #(
         end
     endgenerate
 
+    // make the registers visible to gtkwave
 
 endmodule

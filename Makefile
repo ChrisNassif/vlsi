@@ -19,3 +19,7 @@ transistor_count_cpu:
 
 show_cpu_synthesis:
 	yosys -p "read_verilog -sv src/cpu.sv src/alu.sv src/register_file.sv; synth -top cpu; stat -tech cmos; show cpu"
+
+
+# test_tensor_core:
+	
