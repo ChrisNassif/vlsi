@@ -1,4 +1,4 @@
-module register_file #(
+module cpu_register_file #(
     parameter NUMBER_OF_REGISTERS = 256
 )(
     input logic clock_in,
