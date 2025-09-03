@@ -73,7 +73,7 @@ module cpu (
         .non_bulk_write_register_address_in(tensor_core_register_file_non_bulk_write_register_address),
         .non_bulk_write_data_in(tensor_core_register_file_non_bulk_write_data),
 
-        .bulk_write_enable_in(tensor_core_register_file_bulk_write_enable | is_tensor_core_done_with_calculation), .bulk_write_data_in(tensor_core_register_file_bulk_write_data),
+        .bulk_write_enable_in(tensor_core_register_file_bulk_write_enable | !is_tensor_core_done_with_calculation), .bulk_write_data_in(tensor_core_register_file_bulk_write_data),
         .read_data_out(tensor_core_register_file_read_data)
     );
 

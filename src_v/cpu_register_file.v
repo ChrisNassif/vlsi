@@ -26,7 +26,7 @@ module cpu_register_file (
 			registers[i] <= 8'b00000000;
 	end
 	always @(posedge clock_in)
-		if (write_enable_in)
+		if (write_enable_in && (write_register_address_in != 8'b00000000))
 			registers[write_register_address_in] <= write_data_in;
 	genvar _gv_i_1;
 	generate

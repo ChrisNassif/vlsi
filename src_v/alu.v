@@ -12,9 +12,9 @@ module alu (
 	input wire reset_in;
 	input wire enable_in;
 	input wire [7:0] opcode_in;
-	input wire signed [7:0] alu_input1;
-	input wire signed [7:0] alu_input2;
-	output reg signed [7:0] alu_output;
+	input wire [7:0] alu_input1;
+	input wire [7:0] alu_input2;
+	output reg [7:0] alu_output;
 	localparam ADD = 8'b00000000;
 	localparam SUBTRACT = 8'b00000001;
 	localparam MULTIPLY = 8'b00000010;

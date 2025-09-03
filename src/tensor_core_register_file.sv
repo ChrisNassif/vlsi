@@ -25,7 +25,6 @@ module tensor_core_register_file #(
         end
     end
 
-    // assign read_data_out = registers;
 
     initial begin
         for (int i = 0; i < (NUMBER_OF_REGISTERS-1)/16 + 1; i++) begin

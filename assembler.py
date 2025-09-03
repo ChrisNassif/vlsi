@@ -19,25 +19,26 @@ def main():
         current_machine_code_line += number_into_signed_8bit(assembly_code_tokens[1])
         current_machine_code_line += number_into_signed_8bit(assembly_code_tokens[2])
         current_machine_code_line += number_into_signed_8bit(assembly_code_tokens[3])
-        current_machine_code_line += "00000" 
         
         match assembly_code_tokens[0]:
             case "add":
-                current_machine_code_line += "000"
+                current_machine_code_line += "00000000"
             case "sub":
-                current_machine_code_line += "001"
+                current_machine_code_line += "00000001"
             case "mul":
-                current_machine_code_line += "010"
+                current_machine_code_line += "00000010"
             case "eql":
-                current_machine_code_line += "011"
+                current_machine_code_line += "00000011"
             case "grt":
-                current_machine_code_line += "100"
+                current_machine_code_line += "00000100"
             case "tensor_core_operate":
-                current_machine_code_line += "101"
+                current_machine_code_line += "00000101"
             case "tensor_core_load":
-                current_machine_code_line += "110"
+                current_machine_code_line += "00000110"
             case "cpu_to_tensor_core":
-                current_machine_code_line += "111"
+                current_machine_code_line += "00000111"
+            case "nop":
+                current_machine_code_line += "00001000"
             case _:
                 raise Exception("Operation not found") 
         

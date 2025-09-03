@@ -1,12 +1,14 @@
 module cpu (
 	clock_in,
 	current_instruction,
-	cpu_output
+	cpu_output,
+	tensor_core_result
 );
 	reg _sv2v_0;
 	input wire clock_in;
 	input wire [31:0] current_instruction;
 	output wire [7:0] cpu_output;
+	output wire [127:0] tensor_core_result;
 	wire [7:0] alu_input1;
 	wire [7:0] alu_input2;
 	wire [7:0] alu_output;
@@ -25,6 +27,7 @@ module cpu (
 	reg [255:0] tensor_core_register_file_bulk_write_data;
 	wire [255:0] tensor_core_register_file_read_data;
 	wire [127:0] tensor_core_output;
+	wire is_tensor_core_done_with_calculation;
 	reg [127:0] tensor_core_input1;
 	reg [127:0] tensor_core_input2;
 	alu main_alu(
@@ -55,10 +58,27 @@ module cpu (
 	assign alu_input2 = cpu_register_file_read_data2;
 	assign cpu_register_file_write_data = alu_output;
 	assign cpu_output = alu_output;
-	assign tensor_core_register_file_bulk_write_enable = (alu_opcode == 8'b00000101 ? 1'b1 : 1'b0);
-	assign tensor_core_register_file_non_bulk_write_enable = (alu_opcode == 8'b00000110 ? 1'b1 : 1'b0);
-	assign tensor_core_register_file_non_bulk_write_register_address = (alu_opcode == 8'b00000110 ? current_instruction[28:24] : 5'b00000);
-	assign tensor_core_register_file_non_bulk_write_data = (alu_opcode == 8'b00000110 ? current_instruction[23:16] : 8'b00000000);
+	tensor_core_register_file main_tensor_core_register_file(
+		.clock_in(clock_in),
+		.non_bulk_write_enable_in(tensor_core_register_file_non_bulk_write_enable),
+		.non_bulk_write_register_address_in(tensor_core_register_file_non_bulk_write_register_address),
+		.non_bulk_write_data_in(tensor_core_register_file_non_bulk_write_data),
+		.bulk_write_enable_in(tensor_core_register_file_bulk_write_enable | is_tensor_core_done_with_calculation),
+		.bulk_write_data_in(tensor_core_register_file_bulk_write_data),
+		.read_data_out(tensor_core_register_file_read_data)
+	);
+	small_tensor_core_mma main_tensor_core(
+		.clock_in(clock_in),
+		.tensor_core_register_file_write_enable(tensor_core_register_file_bulk_write_enable | tensor_core_register_file_non_bulk_write_enable),
+		.tensor_core_input1(tensor_core_input1),
+		.tensor_core_input2(tensor_core_input2),
+		.tensor_core_output(tensor_core_output),
+		.is_done_with_calculation(is_tensor_core_done_with_calculation)
+	);
+	assign tensor_core_register_file_bulk_write_enable = 1'b0;
+	assign tensor_core_register_file_non_bulk_write_enable = (alu_opcode == 8'b00000110 ? 1'b1 : (alu_opcode == 8'b00000111 ? 1'b1 : 1'b0));
+	assign tensor_core_register_file_non_bulk_write_register_address = (alu_opcode == 8'b00000110 ? current_instruction[28:24] : (alu_opcode == 8'b00000111 ? current_instruction[28:24] : 5'b00000));
+	assign tensor_core_register_file_non_bulk_write_data = (alu_opcode == 8'b00000110 ? current_instruction[23:16] : (alu_opcode == 8'b00000111 ? cpu_register_file_read_data1 : 8'b00000000));
 	initial begin : sv2v_autoblock_1
 		reg signed [31:0] i;
 		for (i = 0; i < 4; i = i + 1)
@@ -91,20 +111,6 @@ module cpu (
 				end
 		end
 	end
-	better_tensor_core_register_file main_tensor_core_register_file(
-		.clock_in(clock_in),
-		.non_bulk_write_enable_in(tensor_core_register_file_non_bulk_write_enable),
-		.non_bulk_write_register_address_in(tensor_core_register_file_non_bulk_write_register_address),
-		.non_bulk_write_data_in(tensor_core_register_file_non_bulk_write_data),
-		.bulk_write_enable_in(tensor_core_register_file_bulk_write_enable),
-		.bulk_write_data_in(tensor_core_register_file_bulk_write_data),
-		.read_data_out(tensor_core_register_file_read_data)
-	);
-	tensor_core main_tensor_core(
-		.tensor_core_input1(tensor_core_input1),
-		.tensor_core_input2(tensor_core_input2),
-		.tensor_core_output(tensor_core_output)
-	);
 	genvar _gv_i_1;
 	genvar _gv_j_1;
 	genvar _gv_n_1;

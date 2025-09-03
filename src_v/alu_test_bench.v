@@ -3,10 +3,10 @@ module alu_test_bench;
 	reg clock;
 	reg reset;
 	reg [2:0] alu_opcode;
-	reg signed [7:0] alu_input1;
-	reg signed [7:0] alu_input2;
-	wire signed [7:0] alu_output;
-	reg signed [7:0] alu_expected_output;
+	reg [7:0] alu_input1;
+	reg [7:0] alu_input2;
+	wire [7:0] alu_output;
+	reg [7:0] alu_expected_output;
 	alu main_alu(
 		.clock_in(clock),
 		.reset_in(reset),
@@ -29,10 +29,10 @@ module alu_test_bench;
 		$display("  alu_input1    alu_input2   opcode       alu_output");
 		begin : sv2v_autoblock_1
 			integer i;
-			for (i = -128; i < 127; i = i + 1)
+			for (i = 0; i < 256; i = i + 1)
 				begin : sv2v_autoblock_2
 					integer j;
-					for (j = -128; j < 127; j = j + 1)
+					for (j = 0; j < 256; j = j + 1)
 						begin
 							alu_input1 = i;
 							alu_input2 = j;
@@ -47,10 +47,10 @@ module alu_test_bench;
 		end
 		begin : sv2v_autoblock_3
 			integer i;
-			for (i = -128; i < 127; i = i + 1)
+			for (i = 0; i < 256; i = i + 1)
 				begin : sv2v_autoblock_4
 					integer j;
-					for (j = -128; j < 127; j = j + 1)
+					for (j = 0; j < 256; j = j + 1)
 						begin
 							alu_input1 = i;
 							alu_input2 = j;
@@ -65,10 +65,10 @@ module alu_test_bench;
 		end
 		begin : sv2v_autoblock_5
 			integer i;
-			for (i = -128; i < 127; i = i + 1)
+			for (i = 0; i < 256; i = i + 1)
 				begin : sv2v_autoblock_6
 					integer j;
-					for (j = -128; j < 127; j = j + 1)
+					for (j = 0; j < 256; j = j + 1)
 						begin
 							alu_input1 = i;
 							alu_input2 = j;
@@ -83,10 +83,10 @@ module alu_test_bench;
 		end
 		begin : sv2v_autoblock_7
 			integer i;
-			for (i = -128; i < 127; i = i + 1)
+			for (i = 0; i < 256; i = i + 1)
 				begin : sv2v_autoblock_8
 					integer j;
-					for (j = -128; j < 127; j = j + 1)
+					for (j = 0; j < 256; j = j + 1)
 						begin
 							alu_input1 = i;
 							alu_input2 = j;
@@ -101,10 +101,10 @@ module alu_test_bench;
 		end
 		begin : sv2v_autoblock_9
 			integer i;
-			for (i = -128; i < 127; i = i + 1)
+			for (i = 0; i < 256; i = i + 1)
 				begin : sv2v_autoblock_10
 					integer j;
-					for (j = -128; j < 127; j = j + 1)
+					for (j = 0; j < 256; j = j + 1)
 						begin
 							alu_input1 = i;
 							alu_input2 = j;
@@ -113,7 +113,7 @@ module alu_test_bench;
 								;
 							alu_expected_output = alu_input1 > alu_input2;
 							if (alu_output != alu_expected_output)
-								$display("Error [%0t] src/alu_test_bench.sv:127:17 - alu_test_bench.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>\n msg: ", $time, "Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
+								$display("Error [%0t] src/alu_test_bench.sv:127:21 - alu_test_bench.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>\n msg: ", $time, "Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
 						end
 				end
 		end
