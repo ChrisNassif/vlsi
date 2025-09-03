@@ -42,7 +42,7 @@ module alu_test_bench();
         for (integer j=-128; j<127; j++) begin
             alu_input1 = i;
             alu_input2 = j;
-            alu_opcode = 3'b000;
+            alu_opcode = 8'b000;
             
             #30;
             // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
@@ -60,7 +60,7 @@ module alu_test_bench();
         for (integer j=-128; j<127; j++) begin
             alu_input1 = i;
             alu_input2 = j;
-            alu_opcode = 3'b001;
+            alu_opcode = 8'b001;
             
             #30;
             // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
@@ -79,7 +79,7 @@ module alu_test_bench();
         for (integer j=-128; j<127; j++) begin
             alu_input1 = i;
             alu_input2 = j;
-            alu_opcode = 3'b010;
+            alu_opcode = 8'b010;
             
             #30;
             // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
@@ -98,7 +98,7 @@ module alu_test_bench();
         for (integer j=-128; j<127; j++) begin
             alu_input1 = i;
             alu_input2 = j;
-            alu_opcode = 3'b011;
+            alu_opcode = 8'b011;
             
             #30;
             // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
@@ -117,7 +117,7 @@ module alu_test_bench();
         for (integer j=-128; j<127; j++) begin
             alu_input1 = i;
             alu_input2 = j;
-            alu_opcode = 3'b100;
+            alu_opcode = 8'b100;
             
             #30;
             // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);

@@ -32,6 +32,10 @@ def main():
                 current_machine_code_line += "011"
             case "grt":
                 current_machine_code_line += "100"
+            case "tensor_core_operate":
+                current_machine_code_line += "101"
+            case "tensor_core_load":
+                current_machine_code_line += "110"
             case _:
                 raise Exception("Operation not found") 
         

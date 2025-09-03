@@ -1,0 +1,4 @@
+{
+  "verilog.linting.linter": "none",
+  "verilog.linting.iverilog.arguments": "-g2012 -Wall",
+}

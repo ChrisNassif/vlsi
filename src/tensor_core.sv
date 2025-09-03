@@ -15,4 +15,17 @@ module tensor_core (
             end
         end
     end
+
+
+    // Expose the internals of this module to gtkwave
+    genvar i, j;
+    generate
+        for (i = 0; i < 4; i++) begin : expose_tensor_core
+            for (j = 0; j < 4; j++) begin: expose_tensor_core2
+                wire [7:0] tensor_core_input1_wire = tensor_core_input1[i][j];
+                wire [7:0] tensor_core_input2_wire = tensor_core_input2[i][j];
+                wire [7:0] tensor_core_output_wire = tensor_core_output[i][j];
+            end
+        end
+    endgenerate
 endmodule

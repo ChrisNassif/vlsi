@@ -2,13 +2,13 @@ module alu (
     input logic clock_in,
     input logic reset_in,
     input logic enable_in,
-    input logic [2:0] opcode_in,
+    input logic [7:0] opcode_in,
     input logic signed [7:0] alu_input1,
     input logic signed [7:0] alu_input2,
     output logic signed [7:0] alu_output
 );
-    localparam ADD = 3'b000, SUBTRACT = 3'b001, MULTIPLY = 3'b010, 
-        EQUALS = 3'b011, GREATER_THAN = 3'b100;
+    localparam ADD = 8'b0, SUBTRACT = 8'b1, MULTIPLY = 8'b10, 
+        EQUALS = 8'b11, GREATER_THAN = 8'b100;
 
     always_comb begin 
         if (reset_in) begin 
