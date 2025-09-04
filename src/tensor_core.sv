@@ -118,7 +118,7 @@
 //     endgenerate
 // endmodule
 
-module small_tensor_core_mma (
+module small_tensor_core (
     input logic clock_in,
     input logic tensor_core_register_file_write_enable,
     input logic [7:0] tensor_core_input1 [4][4], 

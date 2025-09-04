@@ -1,4 +1,4 @@
-module small_tensor_core_mma (
+module small_tensor_core (
 	clock_in,
 	tensor_core_register_file_write_enable,
 	tensor_core_input1,

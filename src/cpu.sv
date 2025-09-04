@@ -78,7 +78,7 @@ module cpu (
     );
 
 
-    small_tensor_core_mma main_tensor_core (
+    tensor_core_mma main_tensor_core (
         .clock_in(clock_in), 
         .tensor_core_register_file_write_enable((tensor_core_register_file_bulk_write_enable | tensor_core_register_file_non_bulk_write_enable)),
         .tensor_core_input1(tensor_core_input1), .tensor_core_input2(tensor_core_input2),
