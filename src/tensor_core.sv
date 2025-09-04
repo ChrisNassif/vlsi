@@ -65,8 +65,7 @@
 // endmodule
 
 
-
-// module small_tensor_core_mma (
+// module small_tensor_core (
 //     input logic clock_in,
 //     input logic tensor_core_register_file_write_enable,
 //     input logic [7:0] tensor_core_input1 [4][4], 
@@ -74,7 +73,7 @@
 //     output logic [7:0] tensor_core_output [4][4],
 //     output logic is_done_with_calculation
 // );
-//     logic [4:0] counter1;
+//     logic [4:0] counter1, counter2;
 
 //     // multiply_accumulate ma(
 //     //     .a(tensor_core_output[counter1/4][counter1%4]), .b(tensor_core_input1[counter1/4][3:0]), 
@@ -86,17 +85,24 @@
 
 //         if (tensor_core_register_file_write_enable == 1) begin
 //             counter1 = 0;
+//             counter2 = 0;
 //             is_done_with_calculation = 0;
 //         end
 
 //         if (is_done_with_calculation == 0) begin
-//             tensor_core_output[counter1/4][counter1%4] = 0;
-//             // tensor_core_output[counter1/4][counter1%4] = tensor_core_input1[i][j];
-//             for (int k = 0; k < 4; k++) begin
-//                 tensor_core_output[counter1/4][counter1%4] = tensor_core_output[counter1/4][counter1%4] + (tensor_core_input1[counter1/4][k] * tensor_core_input2[k][counter1%4]);
+//             if (counter2 == 0) begin
+//                 tensor_core_output[counter1/4][counter1%4] = 0;
 //             end
+//             // tensor_core_output[counter1/4][counter1%4] = tensor_core_input1[i][j];
+//             tensor_core_output[counter1/4][counter1%4] = tensor_core_output[counter1/4][counter1%4] + (tensor_core_input1[counter1/4][counter2] * tensor_core_input2[counter2][counter1%4]);
 
-//             counter1++;
+//             if (counter2 == 3) begin
+//                 counter1++;
+//                 counter2 = 0;
+//             end
+//             else begin
+//                 counter2++;
+//             end
 //         end
 
 //         if (counter1 == 5'b10000) begin
@@ -118,65 +124,57 @@
 //     endgenerate
 // endmodule
 
-module small_tensor_core (
-    input logic clock_in,
-    input logic tensor_core_register_file_write_enable,
-    input logic [7:0] tensor_core_input1 [4][4], 
-    input logic [7:0] tensor_core_input2 [4][4],
-    output logic [7:0] tensor_core_output [4][4],
-    output logic is_done_with_calculation
-);
-    logic [4:0] counter1, counter2;
 
-    // multiply_accumulate ma(
-    //     .a(tensor_core_output[counter1/4][counter1%4]), .b(tensor_core_input1[counter1/4][3:0]), 
-    //     .c(tensor_core_input2[3:0][counter1%4]), .clock_in(clock_in), .is_done_with_calculation(is_done_with_calculation),
-    //     .counter1(counter1)
-    // );
+// module small_tensor_core (
+//     input  logic clock_in,
+//     input  logic tensor_core_register_file_write_enable,
+//     input  logic [7:0] tensor_core_input1 [4][4], 
+//     input  logic [7:0] tensor_core_input2 [4][4],
+//     output logic [7:0] tensor_core_output [4][4],
+//     output logic is_done_with_calculation
+// );
 
-    always @(posedge clock_in) begin
+//     logic [1:0] row, col;           // which output we are working on
+//     logic [15:0] sum;               // wider accumulator
+//     logic running;
 
-        if (tensor_core_register_file_write_enable == 1) begin
-            counter1 = 0;
-            counter2 = 0;
-            is_done_with_calculation = 0;
-        end
+//     // parallel multiply signals
+//     logic [15:0] products [4];
 
-        if (is_done_with_calculation == 0) begin
-            if (counter2 == 0) begin
-                tensor_core_output[counter1/4][counter1%4] = 0;
-            end
-            // tensor_core_output[counter1/4][counter1%4] = tensor_core_input1[i][j];
-            tensor_core_output[counter1/4][counter1%4] = tensor_core_output[counter1/4][counter1%4] + (tensor_core_input1[counter1/4][counter2] * tensor_core_input2[counter2][counter1%4]);
+//     always_comb begin
+//         for (int k = 0; k < 4; k++) begin
+//             products[k] = tensor_core_input1[row][k] * tensor_core_input2[k][col];
+//         end
+//     end
 
-            if (counter2 == 3) begin
-                counter1++;
-                counter2 = 0;
-            end
-            else begin
-                counter2++;
-            end
-        end
+//     always_ff @(posedge clock_in) begin
+//         if (tensor_core_register_file_write_enable) begin
+//             row <= 0;
+//             col <= 0;
+//             is_done_with_calculation <= 0;
+//             running <= 1;
+//         end else if (running) begin
+//             // perform dot product in one cycle (4 multipliers + adder tree)
+//             sum = products[0] + products[1] + products[2] + products[3];
+//             tensor_core_output[row][col] <= sum[7:0]; // truncate
 
-        if (counter1 == 5'b10000) begin
-            is_done_with_calculation = 1;
-        end
-    end
+//             // advance to next element
+//             if (col == 3) begin
+//                 col <= 0;
+//                 if (row == 3) begin
+//                     row <= 0;
+//                     running <= 0;
+//                     is_done_with_calculation <= 1;
+//                 end else begin
+//                     row <= row + 1;
+//                 end
+//             end else begin
+//                 col <= col + 1;
+//             end
+//         end
+//     end
 
-
-    // Expose the internals of this module to gtkwave
-    genvar i, j;
-    generate
-        for (i = 0; i < 4; i++) begin : expose_tensor_core
-            for (j = 0; j < 4; j++) begin: expose_tensor_core2
-                wire [7:0] tensor_core_input1_wire = tensor_core_input1[i][j];
-                wire [7:0] tensor_core_input2_wire = tensor_core_input2[i][j];
-                wire [7:0] tensor_core_output_wire = tensor_core_output[i][j];
-            end
-        end
-    endgenerate
-endmodule
-
+// endmodule
 
 
 
@@ -220,3 +218,55 @@ endmodule
 //         counter1++
 //     end
 // endmodule
+
+
+
+
+module small_tensor_core (
+    input logic clock_in,
+    input logic tensor_core_register_file_write_enable,
+    input logic [7:0] tensor_core_input1 [4][4], 
+    input logic [7:0] tensor_core_input2 [4][4],
+    output logic [7:0] tensor_core_output [4][4],
+    output logic is_done_with_calculation
+);
+    logic [4:0] counter1;
+    logic [7:0] products [4];
+
+    always_comb begin
+        for (int k = 0; k < 4; k++) begin
+            products[k] = tensor_core_input1[counter1/4][k] * tensor_core_input2[k][counter1%4];
+        end 
+        // tensor_core_output[counter1/4][counter1%4] = tensor_core_input1[counter1/4][counter1%4] + products[0] + products[1] + products[2] + products[3];
+        tensor_core_output[counter1/4][counter1%4] = products[0] + products[1] + products[2] + products[3];
+    end
+
+    always @(posedge clock_in) begin
+
+        if (tensor_core_register_file_write_enable == 1) begin
+            counter1 = 0;
+            is_done_with_calculation = 0;
+        end
+
+        if (is_done_with_calculation == 0 && tensor_core_register_file_write_enable == 0) begin
+            counter1 = counter1 + 1;
+        end
+
+        if (counter1 == 5'b10000) begin
+            is_done_with_calculation = 1;
+        end
+    end
+
+
+    // Expose the internals of this module to gtkwave
+    genvar i, j;
+    generate
+        for (i = 0; i < 4; i++) begin : expose_tensor_core
+            for (j = 0; j < 4; j++) begin: expose_tensor_core2
+                wire [7:0] tensor_core_input1_wire = tensor_core_input1[i][j];
+                wire [7:0] tensor_core_input2_wire = tensor_core_input2[i][j];
+                wire [7:0] tensor_core_output_wire = tensor_core_output[i][j];
+            end
+        end
+    endgenerate
+endmodule

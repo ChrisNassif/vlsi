@@ -78,7 +78,7 @@ module cpu (
     );
 
 
-    tensor_core_mma main_tensor_core (
+    small_tensor_core main_tensor_core (
         .clock_in(clock_in), 
         .tensor_core_register_file_write_enable((tensor_core_register_file_bulk_write_enable | tensor_core_register_file_non_bulk_write_enable)),
         .tensor_core_input1(tensor_core_input1), .tensor_core_input2(tensor_core_input2),
@@ -93,18 +93,18 @@ module cpu (
 
     // for the opcode of load immediate and move from cpu registers to the tensor core register file   
     assign tensor_core_register_file_non_bulk_write_enable = (
-        (alu_opcode == 8'b110) ? 1'b1:
-        (alu_opcode == 8'b111) ? 1'b1: 
+        (alu_opcode == 8'b110) ? 1'b1: // tensor core load immediate
+        (alu_opcode == 8'b111) ? 1'b1: // move from tensor core to cpu
         1'b0
     );
     assign tensor_core_register_file_non_bulk_write_register_address = (
-        (alu_opcode == 8'b110) ? current_instruction[28:24]: 
-        (alu_opcode == 8'b111) ? current_instruction[28:24]:
+        (alu_opcode == 8'b110) ? current_instruction[28:24]: // tensor core load immediate
+        (alu_opcode == 8'b111) ? current_instruction[28:24]: // move from tensor core to cpu
         5'b0
     );
     assign tensor_core_register_file_non_bulk_write_data = (
-        (alu_opcode == 8'b110) ? current_instruction[23:16]: 
-        (alu_opcode == 8'b111) ? cpu_register_file_read_data1: 
+        (alu_opcode == 8'b110) ? current_instruction[23:16]: // tensor core load immediate
+        (alu_opcode == 8'b111) ? cpu_register_file_read_data1: // move from tensor core to cpu
         8'b0
     );
 
@@ -160,3 +160,4 @@ module cpu (
 
 
 endmodule
+
