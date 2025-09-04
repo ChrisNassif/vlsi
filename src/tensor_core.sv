@@ -241,8 +241,23 @@ module small_tensor_core (
         tensor_core_output[counter1/4][counter1%4] = products[0] + products[1] + products[2] + products[3];
     end
 
-    always @(posedge clock_in) begin
+    always @(negedge clock_in) begin
 
+        if (tensor_core_register_file_write_enable == 1) begin
+            counter1 = 0;
+            is_done_with_calculation = 0;
+        end
+
+        if (is_done_with_calculation == 0 && tensor_core_register_file_write_enable == 0) begin
+            counter1 = counter1 + 1;
+        end
+
+        if (counter1 == 5'b10000) begin
+            is_done_with_calculation = 1;
+        end
+    end
+
+    always @(posedge clock_in) begin
         if (tensor_core_register_file_write_enable == 1) begin
             counter1 = 0;
             is_done_with_calculation = 0;

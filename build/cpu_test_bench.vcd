@@ -1,5 +1,5 @@
 $date
-	Wed Sep  3 21:46:56 2025
+	Wed Sep  3 22:14:26 2025
 $end
 $version
 	Icarus Verilog
@@ -3804,6 +3804,30 @@ b100 ?*
 b10 >*
 1#
 #506000
+x"(
+x,
+bx +
+bx k(
+bx -
+bx j(
+bx /
+bx S"
+bx 3
+bx N"
+bx 1
+bx P"
+bx %
+bx D"
+bx 2
+bx O"
+bx 0
+bx Q"
+bx 5
+bx F"
+bx 6
+bx C"
+bx $
+bx )
 b110010 H*
 #510000
 0#
@@ -4461,30 +4485,6 @@ b100 ?*
 b10 >*
 1#
 #1236000
-x"(
-x,
-bx +
-bx k(
-bx -
-bx j(
-bx /
-bx S"
-bx 3
-bx N"
-bx 1
-bx P"
-bx %
-bx D"
-bx 2
-bx O"
-bx 0
-bx Q"
-bx 5
-bx F"
-bx 6
-bx C"
-bx $
-bx )
 b1111011 H*
 #1240000
 0#
