@@ -1,8 +1,8 @@
 `default_nettype wire
 module cpu_test_bench;
 	reg clock;
-	localparam MAX_MACHINE_CODE_LENGTH = 64;
-	reg [31:0] machine_code [63:0];
+	localparam MAX_MACHINE_CODE_LENGTH = 1023;
+	reg [31:0] machine_code [1022:0];
 	reg [31:0] current_instruction;
 	wire [7:0] cpu_output;
 	initial $readmemh("machine_code", machine_code);

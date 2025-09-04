@@ -5,7 +5,7 @@ module cpu_test_bench();
 
     logic clock;   
 
-    localparam MAX_MACHINE_CODE_LENGTH = 64;
+    localparam MAX_MACHINE_CODE_LENGTH = 1023;
 
     logic [31:0] machine_code [MAX_MACHINE_CODE_LENGTH-1:0];
     logic [31:0] current_instruction;
