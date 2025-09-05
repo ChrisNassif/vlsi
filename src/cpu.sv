@@ -8,9 +8,12 @@ module cpu (
     // TODO add code to support immediate instructions
     // TODO, there is a bug if you try to write to a tensor core register when small_tensor_core_mma is done with the matrix 
 
+    
     // DECLARATIONS
     logic [7:0] alu_input1, alu_input2, alu_output;
     logic [7:0] alu_opcode;
+    logic is_add_immediate;
+    logic is_sub_immediate; 
 
     logic [7:0] cpu_register_file_read_register_address1, cpu_register_file_read_register_address2;
     logic [7:0] cpu_register_file_read_data1, cpu_register_file_read_data2;
@@ -33,11 +36,19 @@ module cpu (
     logic [7:0] tensor_core_input1 [4] [4];
     logic [7:0] tensor_core_input2 [4] [4];
 
-
+    logic alu_overflow_flag, alu_carry_flag, alu_zero_flag, alu_sign_flag;
+    logic alu_parity_flag;
+    // Status register to store flags  
+    logic [7:0] status_register;  // [7:4] unused, [3] overflow, [2] carry, [1] zero, [0] sign
     alu main_alu(
         .clock_in(clock_in), .reset_in(1'b0), .enable_in(1'b1), 
         .opcode_in(alu_opcode), .alu_input1(alu_input1), .alu_input2(alu_input2), 
-        .alu_output(alu_output)
+        .alu_output(alu_output), 
+        .overflow_flag(alu_overflow_flag),   
+        .carry_flag(alu_carry_flag),
+        .zero_flag(alu_zero_flag),
+        .sign_flag(alu_sign_flag),
+        .parity_flag(alu_parity_flag)
     );
 
 
@@ -55,13 +66,34 @@ module cpu (
     assign alu_opcode = current_instruction[7:0];
 
 
-    assign cpu_register_file_write_enable = 1'b1;       // TODO THIS OBVIOUSLY NEEDS TO BE CHANGED LATER
-    assign alu_input1 = current_instruction[23:16];     // TODO CHANGE THIS BACK TO register_file_read_data1 ONCE ADD IMMEDIATE IS ADDED
-    assign alu_input2 = cpu_register_file_read_data2;
+    // Check if this is an add immediate instruction (opcode 9)
+    assign is_add_immediate = (alu_opcode == 8'b00001001);
+    assign is_sub_immediate = (alu_opcode == 8'b00001010);
+    // Write enable logic - only write for CPU instructions, not tensor core operations
+    assign cpu_register_file_write_enable = (
+    (alu_opcode == 8'b00000000) ||  // add
+    (alu_opcode == 8'b00000001) ||  // sub  
+    (alu_opcode == 8'b00000010) ||  // mul
+    (alu_opcode == 8'b00000011) ||  // eql
+    (alu_opcode == 8'b00000100) ||  // grt
+    (alu_opcode == 8'b00001001) ||  // add_imm
+    (alu_opcode == 8'b00001010)     // sub_imm
+    ) ? 1'b1 : 1'b0;
+
+    assign alu_input1 = cpu_register_file_read_data1;      // TODO CHANGE THIS BACK TO register_file_read_data1 ONCE ADD IMMEDIATE IS ADDED
+    assign alu_input2 = (is_add_immediate | is_sub_immediate) ? current_instruction[15:8] : cpu_register_file_read_data2;
     assign cpu_register_file_write_data = alu_output;
     assign cpu_output = alu_output;
 
-
+    always_ff @(posedge clock_in) begin
+        if (cpu_register_file_write_enable) begin
+            status_register[4] <= alu_parity_flag;
+            status_register[3] <= alu_overflow_flag;
+            status_register[2] <= alu_carry_flag;
+            status_register[1] <= alu_zero_flag;
+            status_register[0] <= alu_sign_flag;
+        end
+    end
 
 
 
@@ -131,6 +163,8 @@ module cpu (
                 tensor_core_input2[i][j] = tensor_core_register_file_read_data[1][i][j];
             end
         end
+    
+
     end
 
 
