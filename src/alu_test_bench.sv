@@ -6,8 +6,8 @@ module alu_test_bench();
 
     logic clock;
     logic reset;
-    logic [`BUS_WIDTH:0] alu_opcode;
-    logic [`BUS_WIDTH:0] alu_input1, alu_input2, alu_output, alu_expected_output;
+    logic signed [`BUS_WIDTH:0] alu_opcode;
+    logic signed [`BUS_WIDTH:0] alu_input1, alu_input2, alu_output, alu_expected_output;
     
     
     alu main_alu(

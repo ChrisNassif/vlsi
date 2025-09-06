@@ -43,6 +43,21 @@ def main():
                 current_machine_code_line += "00001001" 
             case "sub_imm":
                 current_machine_code_line += "00001010" 
+            # UNIMPLEMENTED FROM HERE DOWN
+            case "mov":
+                current_machine_code_line += "00001011"
+            case "rst":
+                current_machine_code_line += "00001100"
+            case "tensor_core_to_cpu":
+                current_machine_code_line += "00001101"
+            case "read_cpu":
+                current_machine_code_line += "00001110"
+            case "read_tensor_core":
+                current_machine_code_line += "00001111"
+            case "read_tensor_core_burst":
+                current_machine_code_line += "00010000"
+            case "tensor_core_load_burst":
+                current_machine_code_line += "00010001"
             case _:
                 raise Exception("Operation not found") 
         

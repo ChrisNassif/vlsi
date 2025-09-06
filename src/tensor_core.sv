@@ -3,13 +3,13 @@
 module small_tensor_core (
     input logic clock_in,
     input logic tensor_core_register_file_write_enable,
-    input logic [`BUS_WIDTH:0] tensor_core_input1 [4][4], 
-    input logic [`BUS_WIDTH:0] tensor_core_input2 [4][4],
-    output logic [`BUS_WIDTH:0] tensor_core_output [4][4],
+    input logic signed [`BUS_WIDTH:0] tensor_core_input1 [4][4], 
+    input logic signed [`BUS_WIDTH:0] tensor_core_input2 [4][4],
+    output logic signed [`BUS_WIDTH:0] tensor_core_output [4][4],
     output logic is_done_with_calculation
 );
     logic [4:0] counter;
-    logic [`BUS_WIDTH:0] products [4];
+    logic signed [`BUS_WIDTH:0] products [4];
 
     always_comb begin
         for (int k = 0; k < 4; k++) begin

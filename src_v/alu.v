@@ -1,5 +1,4 @@
 module alu (
-	clock_in,
 	reset_in,
 	enable_in,
 	opcode_in,
@@ -13,13 +12,12 @@ module alu (
 	parity_flag
 );
 	reg _sv2v_0;
-	input wire clock_in;
 	input wire reset_in;
 	input wire enable_in;
 	input wire [7:0] opcode_in;
-	input wire [7:0] alu_input1;
-	input wire [7:0] alu_input2;
-	output reg [7:0] alu_output;
+	input wire signed [3:0] alu_input1;
+	input wire signed [3:0] alu_input2;
+	output reg signed [3:0] alu_output;
 	output reg overflow_flag;
 	output reg carry_flag;
 	output reg zero_flag;
@@ -32,16 +30,17 @@ module alu (
 	localparam GREATER_THAN = 8'b00000100;
 	localparam ADD_IMMEDIATE = 8'b00001001;
 	localparam SUBTRACT_IMMEDIATE = 8'b00001010;
-	reg [8:0] extended_result;
+	localparam MOV = 8'b00001011;
+	reg signed [4:0] extended_result;
 	reg [15:0] mult_result;
 	initial begin
-		overflow_flag = 1'b0;
-		carry_flag = 1'b0;
-		zero_flag = 1'b0;
-		sign_flag = 1'b0;
-		extended_result = 9'b000000000;
-		mult_result = 16'b0000000000000000;
-		parity_flag = 1'b0;
+		overflow_flag = 0;
+		carry_flag = 0;
+		zero_flag = 0;
+		sign_flag = 0;
+		extended_result = 0;
+		mult_result = 0;
+		parity_flag = 0;
 	end
 	always @(*) begin
 		if (_sv2v_0)
@@ -104,6 +103,7 @@ module alu (
 					zero_flag = alu_output == 8'b00000000;
 					sign_flag = alu_output[7];
 				end
+				MOV: alu_output = alu_input1;
 				default: alu_output = 0;
 			endcase
 		else

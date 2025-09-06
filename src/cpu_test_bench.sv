@@ -9,8 +9,8 @@ module cpu_test_bench();
     localparam MAX_MACHINE_CODE_LENGTH = 1023;
     logic [31:0] machine_code [0:MAX_MACHINE_CODE_LENGTH-1];
     logic [31:0] current_instruction;
-    logic [`BUS_WIDTH:0] cpu_output;
-    logic [`BUS_WIDTH:0] cpu_registers [256];
+    logic signed [`BUS_WIDTH:0] cpu_output;
+    logic signed [`BUS_WIDTH:0] cpu_registers [256];
     
 
     // Monitor register values for testing
@@ -50,10 +50,10 @@ module cpu_test_bench();
     // Basic register check task
     task check_register;
         input integer reg_num;
-        input [`BUS_WIDTH:0] expected_value;
+        input signed [`BUS_WIDTH:0] expected_value;
         input string test_name;
         begin
-            logic [`BUS_WIDTH:0] actual_value;
+            logic signed [`BUS_WIDTH:0] actual_value;
             actual_value = cpu_registers[reg_num];
             
             test_count++;
@@ -70,11 +70,11 @@ module cpu_test_bench();
     // Enhanced register check task with overflow checking
     task check_register_with_overflow;
         input integer reg_num;
-        input [`BUS_WIDTH:0] expected_value;
+        input signed [`BUS_WIDTH:0] expected_value;
         input logic expected_overflow;
         input string test_name;
         begin
-            logic [`BUS_WIDTH:0] actual_value;
+            logic signed [`BUS_WIDTH:0] actual_value;
             actual_value = cpu_registers[reg_num];
             
             test_count++;
@@ -94,11 +94,11 @@ module cpu_test_bench();
     // Enhanced register check task with parity
     task check_register_with_parity;
         input integer reg_num;
-        input [`BUS_WIDTH:0] expected_value;
+        input signed [`BUS_WIDTH:0] expected_value;
         input logic expected_parity;
         input string test_name;
         begin
-            logic [`BUS_WIDTH:0] actual_value;
+            logic signed [`BUS_WIDTH:0] actual_value;
             actual_value = cpu_registers[reg_num];
             
             test_count++;
@@ -116,7 +116,7 @@ module cpu_test_bench();
     // Enhanced register check task with all flags
     task check_register_with_all_flags;
         input integer reg_num;
-        input [`BUS_WIDTH:0] expected_value;
+        input signed [`BUS_WIDTH:0] expected_value;
         input logic expected_overflow;
         input logic expected_carry;
         input logic expected_zero;
@@ -124,7 +124,7 @@ module cpu_test_bench();
         input logic expected_parity;
         input string test_name;
         begin
-            logic [`BUS_WIDTH:0] actual_value;
+            logic signed [`BUS_WIDTH:0] actual_value;
             actual_value = cpu_registers[reg_num];
             
             test_count++;
@@ -205,7 +205,7 @@ module cpu_test_bench();
         #11;
         
         // Execute instructions and test at key points
-        for (integer i = 0; i < 60 && machine_code[i] != 32'h0; i++) begin
+        for (integer i = 0; i < 1024 && machine_code[i] != 32'h0; i++) begin
             current_instruction = machine_code[i];
             #20;
             

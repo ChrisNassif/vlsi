@@ -2,13 +2,12 @@
 module alu_test_bench;
 	reg clock;
 	reg reset;
-	reg [2:0] alu_opcode;
-	reg [7:0] alu_input1;
-	reg [7:0] alu_input2;
-	wire [7:0] alu_output;
-	reg [7:0] alu_expected_output;
+	reg signed [3:0] alu_opcode;
+	reg signed [3:0] alu_input1;
+	reg signed [3:0] alu_input2;
+	wire signed [3:0] alu_output;
+	reg signed [3:0] alu_expected_output;
 	alu main_alu(
-		.clock_in(clock),
 		.reset_in(reset),
 		.enable_in(1'b1),
 		.opcode_in(alu_opcode),
@@ -41,7 +40,7 @@ module alu_test_bench;
 								;
 							alu_expected_output = alu_input1 + alu_input2;
 							if (alu_output != alu_expected_output)
-								$display("Error [%0t] src/alu_test_bench.sv:52:17 - alu_test_bench.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>\n msg: ", $time, "Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
+								$display("Error [%0t] src/alu_test_bench.sv:53:17 - alu_test_bench.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>\n msg: ", $time, "Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
 						end
 				end
 		end
@@ -59,7 +58,7 @@ module alu_test_bench;
 								;
 							alu_expected_output = alu_input1 - alu_input2;
 							if (alu_output != alu_expected_output)
-								$display("Error [%0t] src/alu_test_bench.sv:70:17 - alu_test_bench.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>\n msg: ", $time, "Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
+								$display("Error [%0t] src/alu_test_bench.sv:71:17 - alu_test_bench.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>\n msg: ", $time, "Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
 						end
 				end
 		end
@@ -77,7 +76,7 @@ module alu_test_bench;
 								;
 							alu_expected_output = alu_input1 * alu_input2;
 							if (alu_output != alu_expected_output)
-								$display("Error [%0t] src/alu_test_bench.sv:89:17 - alu_test_bench.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>\n msg: ", $time, "Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
+								$display("Error [%0t] src/alu_test_bench.sv:90:17 - alu_test_bench.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>\n msg: ", $time, "Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
 						end
 				end
 		end
@@ -95,7 +94,7 @@ module alu_test_bench;
 								;
 							alu_expected_output = alu_input1 == alu_input2;
 							if (alu_output != alu_expected_output)
-								$display("Error [%0t] src/alu_test_bench.sv:108:17 - alu_test_bench.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>\n msg: ", $time, "Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
+								$display("Error [%0t] src/alu_test_bench.sv:109:17 - alu_test_bench.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>\n msg: ", $time, "Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
 						end
 				end
 		end
@@ -113,7 +112,7 @@ module alu_test_bench;
 								;
 							alu_expected_output = alu_input1 > alu_input2;
 							if (alu_output != alu_expected_output)
-								$display("Error [%0t] src/alu_test_bench.sv:127:21 - alu_test_bench.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>\n msg: ", $time, "Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
+								$display("Error [%0t] src/alu_test_bench.sv:128:21 - alu_test_bench.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>.<unnamed_block>\n msg: ", $time, "Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
 						end
 				end
 		end

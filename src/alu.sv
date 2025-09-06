@@ -4,9 +4,9 @@ module alu (
     input logic reset_in,
     input logic enable_in,
     input logic [7:0] opcode_in,
-    input logic [`BUS_WIDTH:0] alu_input1,
-    input logic [`BUS_WIDTH:0] alu_input2,
-    output logic [`BUS_WIDTH:0] alu_output,
+    input logic signed [`BUS_WIDTH:0] alu_input1,
+    input logic signed [`BUS_WIDTH:0] alu_input2,
+    output logic signed [`BUS_WIDTH:0] alu_output,
     output logic overflow_flag,         // Overflow detection
     output logic carry_flag,            // Carry flag for unsigned operations
     output logic zero_flag,             // Zero flag
@@ -14,9 +14,10 @@ module alu (
     output logic parity_flag 
 );
     localparam ADD = 8'b0, SUBTRACT = 8'b1, MULTIPLY = 8'b10, 
-        EQUALS = 8'b11, GREATER_THAN = 8'b100, ADD_IMMEDIATE = 8'b1001, SUBTRACT_IMMEDIATE = 8'b1010;
+        EQUALS = 8'b11, GREATER_THAN = 8'b100, ADD_IMMEDIATE = 8'b1001, 
+        SUBTRACT_IMMEDIATE = 8'b1010, MOV = 8'b1011;
 
-    logic [`BUS_WIDTH+1:0] extended_result;  // extra bit for carry detection
+    logic signed [`BUS_WIDTH+1:0] extended_result;  // extra bit for carry detection
     logic [15:0] mult_result;     // 16-bit for multiplication
 
 
@@ -126,6 +127,11 @@ module alu (
                     zero_flag = (alu_output == 8'b0);
                     sign_flag = alu_output[7];
                 end
+
+                MOV: begin
+                    alu_output = alu_input1;
+                end
+
 
                 default: begin
                     alu_output = 0;

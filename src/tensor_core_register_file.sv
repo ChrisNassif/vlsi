@@ -6,13 +6,14 @@ module tensor_core_register_file #(
     parameter NUMBER_OF_REGISTERS = 32
 )(
     input logic clock_in,
+    input logic reset_in,
     input logic non_bulk_write_enable_in,
     input logic [$clog2(NUMBER_OF_REGISTERS)-1:0] non_bulk_write_register_address_in,
-    input logic [`BUS_WIDTH:0] non_bulk_write_data_in,
+    input logic signed [`BUS_WIDTH:0] non_bulk_write_data_in,
 
     input logic bulk_write_enable_in,
-    input logic [`BUS_WIDTH:0] bulk_write_data_in [(NUMBER_OF_REGISTERS-1)/16 + 1] [4] [4],
-    output logic [`BUS_WIDTH:0] read_data_out [(NUMBER_OF_REGISTERS-1)/16 + 1] [4] [4]
+    input logic signed [`BUS_WIDTH:0] bulk_write_data_in [(NUMBER_OF_REGISTERS-1)/16 + 1] [4] [4],
+    output logic signed [`BUS_WIDTH:0] read_data_out [(NUMBER_OF_REGISTERS-1)/16 + 1] [4] [4]
 );
 
     reg [7:0] registers [(NUMBER_OF_REGISTERS-1)/16 + 1] [4] [4];
@@ -38,8 +39,9 @@ module tensor_core_register_file #(
         end
     end
 
+
     always_ff @(posedge clock_in) begin
-        if (bulk_write_enable_in) begin
+        if (bulk_write_enable_in && reset_in == 0) begin
             for (int i = 0; i < (NUMBER_OF_REGISTERS-1)/16 + 1; i++) begin
                 for (int j = 0; j < 4; j++) begin
                     for (int k = 0; k < 4; k++) begin
@@ -49,8 +51,19 @@ module tensor_core_register_file #(
             end
         end
 
-        else if (non_bulk_write_enable_in) begin
+
+        else if (non_bulk_write_enable_in && reset_in == 0) begin
             registers[non_bulk_write_register_address_in/16][(non_bulk_write_register_address_in%16)/4][non_bulk_write_register_address_in%4] <= non_bulk_write_data_in;
+        end
+
+        else if (reset_in == 1) begin
+            for (int i = 0; i < (NUMBER_OF_REGISTERS-1)/16 + 1; i++) begin
+                for (int j = 0; j < 4; j++) begin
+                    for (int k = 0; k < 4; k++) begin
+                        registers[i][j][k] = 8'b0;
+                    end
+                end
+            end
         end
     end
 
