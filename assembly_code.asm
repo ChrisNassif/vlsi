@@ -4,5 +4,11 @@ move_cpu 3 1 0
 cpu_to_tensor_core 1 1 0
 move_tensor_core 3 1 0
 tensor_core_to_cpu 4 3 0
+read_cpu 0 4 0
+read_tensor_core 0 3 0
+reset 0 0 0
+read_cpu 0 4 0
+read_tensor_core 0 3 0
+nop 0 0 0
 nop 0 0 0
 nop 0 0 0
