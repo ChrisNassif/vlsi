@@ -15,9 +15,11 @@ module small_tensor_core (
         for (int k = 0; k < 4; k++) begin
             products[k] = tensor_core_input1[counter/4][k] * tensor_core_input2[k][counter%4];
         end 
+
         // tensor_core_output[counter/4][counter%4] = tensor_core_input1[counter/4][counter%4] + products[0] + products[1] + products[2] + products[3];
         tensor_core_output[counter/4][counter%4] = products[0] + products[1] + products[2] + products[3];
     end
+
 
     always @(negedge clock_in) begin
 
@@ -54,7 +56,7 @@ module small_tensor_core (
 
 
 
-    
+
 
 
     // Expose the internals of this module to gtkwave

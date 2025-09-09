@@ -29,11 +29,12 @@
 module cpu (
     input logic clock_in, 
     input logic shifted_clock_in,
+    input logic shifted_clock2_in,
+    input logic shifted_clock3_in,
     input logic [31:0] current_instruction, 
     output logic signed [`BUS_WIDTH:0] cpu_output,
     output logic signed [`BUS_WIDTH:0] tensor_core_result [4] [4]
-);
-    // TODO, there is a bug if you try to write to a tensor core register when small_tensor_core_mma is done with the matrix???
+)
 
     
     // DECLARATIONS
@@ -171,7 +172,7 @@ module cpu (
         .tensor_core_output(tensor_core_output), .is_done_with_calculation(is_tensor_core_done_with_calculation)
     );
 
-    assign tensor_core_clock = shifted_clock_in ^ clock_in;
+    assign tensor_core_clock = (shifted_clock_in ^ clock_in) ^ (shifted_clock2_in ^ shifted_clock3_in);
     // assign tensor_core_clock = clock_in;
 
     // For the opcode of operating on the contents in the tensor core register file

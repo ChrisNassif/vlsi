@@ -26,7 +26,11 @@ module cpu_test_bench();
         $readmemh("machine_code", machine_code);
     end
 
-    cpu main_cpu(.clock_in(clock), .shifted_clock_in(shifted_clock), .current_instruction(current_instruction), .cpu_output(cpu_output));
+    cpu main_cpu(
+        .clock_in(clock), .shifted_clock_in(shifted_clock),
+        .shifted_clock2_in(0), .shifted_clock3_in(0), 
+        .current_instruction(current_instruction), .cpu_output(cpu_output)
+        );
 
 
     // start clocks
