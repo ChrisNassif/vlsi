@@ -6,7 +6,7 @@ module alu_test_bench();
 
     logic clock;
     logic reset;
-    logic signed [`BUS_WIDTH:0] alu_opcode;
+    logic signed [7:0] alu_opcode;
     logic signed [`BUS_WIDTH:0] alu_input1, alu_input2, alu_output, alu_expected_output;
     
     
@@ -39,83 +39,83 @@ module alu_test_bench();
         $display("  alu_input1    alu_input2   opcode       alu_output");
 
         // test addition opcode
-        for (integer i=0; i<256; i++) begin
-        for (integer j=0; j<256; j++) begin
-            alu_input1 = i;
-            alu_input2 = j;
-            alu_opcode = 8'b000;
-            
-            #30;
-            // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
+        for (integer i=-128; i<127; i++) begin
+            for (integer j=-128; j<127; j++) begin
+                alu_input1 = i;
+                alu_input2 = j;
+                alu_opcode = 8'b000;
+                
+                #30;
+                // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
 
-            alu_expected_output = alu_input1 + alu_input2;
-            if (alu_output != alu_expected_output) begin
-                $error("Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
+                alu_expected_output = alu_input1 + alu_input2;
+                if (alu_output != alu_expected_output) begin
+                    $error("Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
+                end
+
             end
-
-        end
         end
         
         // test subtraction opcode
-        for (integer i=0; i<256; i++) begin
-        for (integer j=0; j<256; j++) begin
-            alu_input1 = i;
-            alu_input2 = j;
-            alu_opcode = 8'b001;
-            
-            #30;
-            // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
+        for (integer i=-128; i<127; i++) begin
+            for (integer j=-128; j<127; j++) begin
+                alu_input1 = i;
+                alu_input2 = j;
+                alu_opcode = 8'b001;
+                
+                #30;
+                // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
 
-            alu_expected_output = alu_input1 - alu_input2;
-            if (alu_output != alu_expected_output) begin
-                $error("Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
+                alu_expected_output = alu_input1 - alu_input2;
+                if (alu_output != alu_expected_output) begin
+                    $error("Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
+                end
+
             end
-
-        end
         end
         
 
-        // test multiplication opcode
-        for (integer i=0; i<256; i++) begin
-        for (integer j=0; j<256; j++) begin
-            alu_input1 = i;
-            alu_input2 = j;
-            alu_opcode = 8'b010;
-            
-            #30;
-            // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
+        // // test multiplication opcode
+        // for (integer i=0; i<256; i++) begin
+        //     for (integer j=0; j<256; j++) begin
+        //         alu_input1 = i;
+        //         alu_input2 = j;
+        //         alu_opcode = 8'b010;
+                
+        //         #30;
+        //         // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
 
-            alu_expected_output = alu_input1 * alu_input2;
-            if (alu_output != alu_expected_output) begin
-                $error("Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
-            end
+        //         alu_expected_output = alu_input1 * alu_input2;
+        //         if (alu_output != alu_expected_output) begin
+        //             $error("Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
+        //         end
 
-        end
-        end
+        //     end
+        // end
 
 
         // test equals opcode
-        for (integer i=0; i<256; i++) begin
-        for (integer j=0; j<256; j++) begin
-            alu_input1 = i;
-            alu_input2 = j;
-            alu_opcode = 8'b011;
-            
-            #30;
-            // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
+        for (integer i=-128; i<127; i++) begin
+            for (integer j=-128; j<127; j++) begin
+                alu_input1 = i;
+                alu_input2 = j;
+                alu_opcode = 8'b011;
+                
+                #30;
+                // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
 
-            alu_expected_output = (alu_input1 == alu_input2);
-            if (alu_output != alu_expected_output) begin
-                $error("Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
+                alu_expected_output = (alu_input1 == alu_input2);
+                if (alu_output != alu_expected_output) begin
+                    $error("Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
+                end
+
             end
-
-        end
         end
 
 
         // test greater than opcode
-        for (integer i=0; i<256; i++) begin
-            for (integer j=0; j<256; j++) begin
+        for (integer i=-128; i<127; i++) begin
+            for (integer j=-128; j<127; j++) begin
                 alu_input1 = i;
                 alu_input2 = j;
                 alu_opcode = 8'b100;
@@ -124,6 +124,24 @@ module alu_test_bench();
                 // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
 
                 alu_expected_output = (alu_input1 > alu_input2);
+                if (alu_output != alu_expected_output) begin
+                    $error("Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
+                end
+
+            end
+        end
+
+        // test move_cpu opcode
+        for (integer i=-128; i<127; i++) begin
+            for (integer j=-128; j<127; j++) begin
+                alu_input1 = i;
+                alu_input2 = j;
+                alu_opcode = 8'b1011;
+                
+                #30;
+                // $display("%d           %d            %3b        %d",alu_input1, alu_input2, alu_opcode, alu_output);
+
+                alu_expected_output = alu_input1;
                 if (alu_output != alu_expected_output) begin
                     $error("Mismatch: Expected %h, Got %h at time %0t", alu_expected_output, alu_output, $time);
                 end

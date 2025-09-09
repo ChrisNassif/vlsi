@@ -11,7 +11,7 @@ module alu (
     output logic carry_flag,            // Carry flag for unsigned operations
     output logic zero_flag,             // Zero flag
     output logic sign_flag,             // Sign flag (MSB of result)
-    output logic parity_flag 
+    output logic parity_flag            // Parity flag
 );
     localparam ADD = 8'b0, SUBTRACT = 8'b1, MULTIPLY = 8'b10, 
         EQUALS = 8'b11, GREATER_THAN = 8'b100, ADD_IMMEDIATE = 8'b1001, 
@@ -37,7 +37,6 @@ module alu (
 
         if (reset_in) begin 
             alu_output = 0;
-            zero_flag = 1;
         end 
         
         else if (enable_in) begin
