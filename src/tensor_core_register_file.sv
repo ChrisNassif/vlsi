@@ -1,4 +1,4 @@
-`define BUS_WIDTH 3
+`define BUS_WIDTH 7
 
 // A register file meant to supply values to a tensor core.
 // This register file exposes all of the wires to each register, so a tensor core can take each of the values inside the registers in a single clock cycle 

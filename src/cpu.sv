@@ -22,7 +22,7 @@
 
 
 
-`define BUS_WIDTH 3
+`define BUS_WIDTH 7
 
 
 
@@ -42,9 +42,9 @@ module cpu (
     logic [7:0] alu_opcode;
     logic is_immediate_instruction;
 
-    logic [2:0] cpu_register_file_read_register_address1, cpu_register_file_read_register_address2;
+    logic [4:0] cpu_register_file_read_register_address1, cpu_register_file_read_register_address2;
     logic signed [`BUS_WIDTH:0] cpu_register_file_read_data1, cpu_register_file_read_data2;
-    logic [2:0] cpu_register_file_write_register_address;
+    logic [4:0] cpu_register_file_write_register_address;
     logic signed [`BUS_WIDTH:0] cpu_register_file_write_data;
     logic cpu_register_file_write_enable;
 

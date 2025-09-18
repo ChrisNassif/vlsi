@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 `default_nettype wire
-`define BUS_WIDTH 3
+`define BUS_WIDTH 7
 
 
 module cpu_test_bench();
@@ -10,11 +10,11 @@ module cpu_test_bench();
     logic [31:0] machine_code [0:MAX_MACHINE_CODE_LENGTH-1];
     logic [31:0] current_instruction;
     logic signed [`BUS_WIDTH:0] cpu_output;
-    logic signed [`BUS_WIDTH:0] cpu_registers [8];
+    logic signed [`BUS_WIDTH:0] cpu_registers [32];
     
 
     // Monitor register values for testing
-    assign cpu_registers =  main_cpu.main_cpu_register_file.registers;
+    assign cpu_registers = main_cpu.main_cpu_register_file.registers;
 
 
     // Test tracking variables
@@ -28,9 +28,9 @@ module cpu_test_bench();
 
     cpu main_cpu(
         .clock_in(clock), .shifted_clock_in(shifted_clock),
-        .shifted_clock2_in(0), .shifted_clock3_in(0), 
+        .shifted_clock2_in(1`b0), .shifted_clock3_in(1`b0), 
         .current_instruction(current_instruction), .cpu_output(cpu_output)
-        );
+    );
 
 
     // start clocks

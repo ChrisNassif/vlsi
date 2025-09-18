@@ -1,4 +1,4 @@
-`define BUS_WIDTH 3
+`define BUS_WIDTH 7
 `timescale 1ns / 1ps
 
 module alu (
