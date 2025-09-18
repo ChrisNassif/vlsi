@@ -1,4 +1,5 @@
 `define BUS_WIDTH 3
+`timescale 1ns / 1ps
 
 module alu (
     input logic reset_in,
@@ -21,8 +22,11 @@ module alu (
     logic [15:0] mult_result;     // 16-bit for multiplication
 
 
-    // Default flag values and temp logic values
-    initial begin 
+
+    always_comb begin 
+
+        // Default flag values and temp logic values
+
         overflow_flag = 0;
         carry_flag = 0;
         zero_flag = 0;
@@ -30,10 +34,7 @@ module alu (
         extended_result = 0;
         mult_result = 0;
         parity_flag = 0;
-    end
-
-
-    always_comb begin 
+        
 
         if (reset_in) begin 
             alu_output = 0;
