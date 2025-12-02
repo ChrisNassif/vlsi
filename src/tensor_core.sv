@@ -1,4 +1,5 @@
 `define BUS_WIDTH 7
+`define BATCH_SIZE 4
 
 module small_tensor_core (
     input logic clock_in,
@@ -10,15 +11,17 @@ module small_tensor_core (
     output logic is_done_with_calculation
 );
     logic [4:0] counter;
-    logic signed [`BUS_WIDTH:0] products [4];
+    logic signed [`BUS_WIDTH:0] products [4] [`BATCH_SIZE];
 
     always_comb begin
-        for (int k = 0; k < 4; k++) begin
-            products[k] = tensor_core_input1[counter/4][k] * tensor_core_input2[k][counter%4];
-        end 
+        for (int i = 0; i < `BATCH_SIZE; i++) begin
+            for (int k = 0; k < 4; k++) begin
+                products[k][i] = tensor_core_input1[(counter+i)/4][k] * tensor_core_input2[k][(counter+i)%4];
+            end 
 
-        // tensor_core_output[counter/4][counter%4] = tensor_core_input1[counter/4][counter%4] + products[0] + products[1] + products[2] + products[3];
-        tensor_core_output[counter/4][counter%4] = products[0] + products[1] + products[2] + products[3];
+            // tensor_core_output[counter/4][counter%4] = tensor_core_input1[counter/4][counter%4] + products[0] + products[1] + products[2] + products[3];
+            tensor_core_output[(counter+i)/4][(counter+i)%4] = products[0][i] + products[1][i] + products[2][i] + products[3][i];
+        end
     end
 
 
@@ -29,35 +32,26 @@ module small_tensor_core (
             is_done_with_calculation = 0;
         end
 
-        if (is_done_with_calculation == 0 && tensor_core_register_file_write_enable == 0 && counter != 0) begin
-            counter++;
+        if (is_done_with_calculation == 0 && tensor_core_register_file_write_enable == 0) begin
+            counter = counter + `BATCH_SIZE;
         end
 
-        if (should_start_tensor_core == 1 && counter == 0) begin
-            counter++;
-        end
-
-        if (counter == 5'b10000) begin
+        if (counter >= 5'b10000) begin
             is_done_with_calculation = 1;
         end
     end
 
-    always @(posedge clock_in) begin
 
+    always @(posedge clock_in) begin
         if (tensor_core_register_file_write_enable == 1) begin
             counter = 0;
             is_done_with_calculation = 0;
         end
-
-        if (is_done_with_calculation == 0 && tensor_core_register_file_write_enable == 0 && counter != 0) begin
-            counter++;
+        if (is_done_with_calculation == 0 && tensor_core_register_file_write_enable == 0) begin
+            counter = counter + `BATCH_SIZE;
         end
 
-        if (should_start_tensor_core == 1 && counter == 0) begin
-            counter++;
-        end
-        
-        if (counter == 5'b10000) begin
+        if (counter >= 5'b10000) begin
             is_done_with_calculation = 1;
         end
     end
