@@ -108,7 +108,7 @@ module cpu (
     assign alu_input1 = cpu_register_file_read_data1;
     assign alu_input2 = cpu_register_file_read_data2;
     assign cpu_output = (
-        (alu_opcode == `CPU_READ_OPCODE) ? cpu_register_file_read_data1:
+        (alu_opcode == `CPU_READ_OPCODE) ? cpu_register_file_read_data2:
         (alu_opcode == `TENSOR_CORE_READ_OPCODE) ? tensor_core_register_file_non_bulk_read_data:
         alu_output
     );
